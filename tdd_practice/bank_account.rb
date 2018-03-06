@@ -3,7 +3,7 @@ class BankAccount
 
   def initialize(starting_balance=0)
     raise ArgumentError if !starting_balance.is_a?(Integer)
-    @balance = starting_balance.to_i
+    @balance = starting_balance
   end
 
   def check_balance
