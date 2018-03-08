@@ -2,14 +2,24 @@ require 'minitest/autorun'
 require_relative 'bank_account'
 
 class BankAccountTest < MiniTest::Unit::TestCase
+  def test_enter_invalid_balance
+    assert_raises(ArgumentError) { test = BankAccount.new("hello") }
+  end
+
+  def test_enter_negative_balance
+    assert_raises(ArgumentError) { test = BankAccount.new(-rand(100)) }
+  end
+
+    def test_enter_valid_balance
+    account = BankAccount.new(10)
+    assert_equal account.balance, 10
+  end
+
   def test_check_balance_with_valid_balance
     account = BankAccount.new(5)
     assert_equal "Your balance is $5", account.check_balance
   end
 
-  def test_check_balance_with_invalid_balance
-    assert_raises(ArgumentError) { test = BankAccount.new("hello") }
-  end
 
   def test_math_around_deposits
     base = rand(100)

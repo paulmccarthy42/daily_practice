@@ -2,7 +2,7 @@ class BankAccount
   attr_reader :balance
 
   def initialize(starting_balance=0)
-    raise ArgumentError if !starting_balance.is_a?(Integer)
+    raise ArgumentError if !starting_balance.is_a?(Integer) || starting_balance < 0
     @balance = starting_balance
   end
 
