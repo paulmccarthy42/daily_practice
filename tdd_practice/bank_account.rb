@@ -30,3 +30,8 @@ class BankAccount
     end
   end
 end
+
+def list
+  []
+end
+
