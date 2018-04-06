@@ -1,6 +1,6 @@
 class PhoneNumber
   def self.clean(number)
-    cleaned = number.gsub(/\D/, "").match(/\d{10,11}/).to_s
+    cleaned = number.gsub(/\D/, "").gsub(/^1/, "").match(/\d{10,11}/).to_s
     if !self.valid_number?(cleaned)
       return nil
     end
@@ -23,4 +23,8 @@ class PhoneNumber
   end
 end
 
-p PhoneNumber.clean("12234567190")
+module BookKeeping
+  VERSION = 2
+end
+
+p PhoneNumber.clean("+1 (223) 456-7890")

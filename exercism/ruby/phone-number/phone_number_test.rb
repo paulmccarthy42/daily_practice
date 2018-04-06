@@ -59,7 +59,7 @@ class PhoneNumberTest < Minitest::Test
   end
 
   def test_invalid_if_exchange_code_does_not_start_with_2_9
-    skip
+    # skip
     assert_nil PhoneNumber.clean("(223) 056-7890")
   end
 
@@ -81,7 +81,7 @@ class PhoneNumberTest < Minitest::Test
   # http://ruby-doc.org/docs/ruby-doc-bundle/UsersGuide/rg/constants.html
 
   def test_bookkeeping
-    skip
+    # skip
     assert_equal 2, BookKeeping::VERSION
   end
 end
