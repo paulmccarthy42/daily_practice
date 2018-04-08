@@ -72,13 +72,13 @@ class BowlingTest < Minitest::Test
   end
 
   def test_rolling_a_spare_with_the_two_roll_bonus_does_not_get_a_bonus_roll
-    # skip
-    record([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 7, 3])
+    skip
+    record([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 7, 3])
     assert_equal 20, @game.score
   end
 
   def test_strikes_with_the_two_roll_bonus_do_not_get_bonus_rolls
-    # skip
+    skip
     record([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 10])
     assert_equal 30, @game.score
   end

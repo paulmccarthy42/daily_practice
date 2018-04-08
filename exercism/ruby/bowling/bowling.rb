@@ -4,8 +4,7 @@ class Game
   def initialize
     @score = 0
     @rolls = []
-    @last_roll = 0
-    @second_last_roll = 0
+    @frame = 0
   end
 
   def spare?
@@ -29,6 +28,7 @@ class Game
     @score += pins if new_strike?
     @score += pins if old_strike?
     @rolls << pins
+    @frame += 1 if @rolls.length.even?
   end
 end
 
