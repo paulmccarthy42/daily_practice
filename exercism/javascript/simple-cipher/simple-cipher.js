@@ -1,15 +1,18 @@
-var Cipher = function(key) {
-  this.key = key || "aaaaaaaaaa";
-  this.alphabet = "abcdefghijklmonpqrstuvwxyz";
-};
+var alphabet = "abcdefghijklmonpqrstuvwxyz";
+
+function Cipher(key) {
+  if (key === "" || (key && key === key.toUpperCase())) {
+    throw Error("Bad key");
+  }
+  this.key = key || "aaaaaaaaaaaaaaaaaa";
+}
 
 Cipher.prototype.encode = function(phrase) {
-  if (phrase === this.key) {
-    return this.key;
-  }
   var encoded = "";
   for (var i = 0; i < phrase.length; i++) {
-    encoded += this.alphabet[this.alphabet.indexOf(phrase[i]) + 1];
+    var indexFromKey = alphabet.indexOf(this.key[i]);
+    var indexFromPhrase = alphabet.indexOf(phrase[i]);
+    encoded += alphabet[(indexFromPhrase + indexFromKey) % alphabet.length];
   }
   return encoded;
 };
@@ -17,9 +20,15 @@ Cipher.prototype.encode = function(phrase) {
 Cipher.prototype.decode = function(phrase) {
   var decoded = "";
   for (var i = 0; i < phrase.length; i++) {
-    decoded += this.alphabet[this.alphabet.indexOf(phrase[i]) - 1];
+    var indexFromKey = alphabet.indexOf(this.key[i]);
+    var indexFromPhrase = alphabet.indexOf(phrase[i]);
+    decoded += alphabet[indexFromPhrase - indexFromKey];
   }
   return decoded;
 };
 
 module.exports = Cipher;
+
+var x = new Cipher("iamapandabear");
+
+console.log(x.encode("iamapandabear"));
