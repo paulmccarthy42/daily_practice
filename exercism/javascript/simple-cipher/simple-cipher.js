@@ -1,4 +1,4 @@
-var alphabet = "abcdefghijklmonpqrstuvwxyz";
+var alphabet = "abcdefghijklmnopqrstuvwxyz";
 
 function Cipher(key) {
   if (key === "" || (key && key === key.toUpperCase())) {
@@ -29,6 +29,11 @@ Cipher.prototype.decode = function(phrase) {
 
 module.exports = Cipher;
 
-var x = new Cipher("iamapandabear");
+// var x = new Cipher("iamapandabear");
 
-console.log(x.encode("iamapandabear"));
+// console.log(x.encode("iamapandabear"));
+
+// console.log(alphabet.indexOf("n"));
+
+// console.log(alphabet[28 % 26]);
+
