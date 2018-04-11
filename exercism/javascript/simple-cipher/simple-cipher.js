@@ -4,7 +4,7 @@ function Cipher(key) {
   if (key === "" || (key && key === key.toUpperCase())) {
     throw Error("Bad key");
   }
-  this.key = key || "aaaaaaaaaaaaaaaaaa";
+  this.key = key || randomizedKey();
 }
 
 Cipher.prototype.encode = function(phrase) {
@@ -30,6 +30,13 @@ Cipher.prototype.decode = function(phrase) {
   return decoded;
 };
 
-module.exports = Cipher;
+function randomizedKey() {
+  var key = "";
+  for (var i = 0; i < 100; i++) {
+    key += alphabet[Math.floor(Math.random() * alphabet.length)];
+  }
+  return key;
+}
 
+module.exports = Cipher;
 
