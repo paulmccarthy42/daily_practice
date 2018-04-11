@@ -10,7 +10,7 @@ function Cipher(key) {
 Cipher.prototype.encode = function(phrase) {
   var encoded = "";
   for (var i = 0; i < phrase.length; i++) {
-    var indexFromKey = alphabet.indexOf(this.key[i]);
+    var indexFromKey = alphabet.indexOf(this.key[i % this.key.length]);
     var indexFromPhrase = alphabet.indexOf(phrase[i]);
     encoded += alphabet[(indexFromPhrase + indexFromKey) % alphabet.length];
   }
@@ -22,18 +22,14 @@ Cipher.prototype.decode = function(phrase) {
   for (var i = 0; i < phrase.length; i++) {
     var indexFromKey = alphabet.indexOf(this.key[i]);
     var indexFromPhrase = alphabet.indexOf(phrase[i]);
-    decoded += alphabet[indexFromPhrase - indexFromKey];
+    decoded +=
+      alphabet[
+        (indexFromPhrase - indexFromKey + alphabet.length) % alphabet.length
+      ];
   }
   return decoded;
 };
 
 module.exports = Cipher;
 
-// var x = new Cipher("iamapandabear");
-
-// console.log(x.encode("iamapandabear"));
-
-// console.log(alphabet.indexOf("n"));
-
-// console.log(alphabet[28 % 26]);
 
