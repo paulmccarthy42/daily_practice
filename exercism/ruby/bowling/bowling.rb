@@ -1,87 +1,70 @@
 class Game
-  attr_accessor :rolls, :frames #for testing
+  attr_accessor :frames, :extras #for testing
 
   BowlingError = "Failed the rules of bowling"
 
   def initialize
-    @score = 0
-    @rolls = []
     @frames = [[]]
+    @extras = []
+    @score = 0
+  end
+
+  def ten_frames_over?
+    (@frames.length == 10 && !frame_incomplete?) ||
+    (@frames.length > 10)
   end
 
   def score
-    raise BowlingError if @frames.length < 10
+    raise BowlingError if !ten_frames_over? || @extras.length < extra_roll_total
     @score
   end
 
-  def spare?
-    @frames[-2] &&
-      @frames[-2].sum == 10 && 
-      !@frames[-2].include?(10) && 
-      @frames.length <= 10 &&
-      @frames.last.length == 1
+  def spare?(frame)
+    frame.length == 2 &&
+    frame.sum == 10
   end
 
-  def new_strike?
-    @frames[-2] &&
-      @frames[-2].include?(10) && 
-      @frames.length <= 10
-  end
-
-  def old_strike?
-    (@rolls.length >= 2 && @rolls[-2] == 10) && @frames.length <= 10
+  def strike?(frame)
+    frame == [10] || frame == [0, 10]
   end
 
   def frame_incomplete?
-    @frames.last.last != 10 && @frames.last.length < 2
+    @frames.last.length < 2 && 
+    @frames.last.sum != 10
   end
 
-  def wrong_number_of_pins?(pins)
-    !pins.between?(0,10) ||
-    (frame_incomplete? && 
-      @frames.last.last && 
-      @frames.last.last + pins > 10)
+  def bonus
+    (spare?(@frames.last) ? 1 : 0) + 
+    (strike?(@frames.last) ? 1 : 0) + 
+    (@frames.flatten[-2] == 10 ? 1 : 0)
   end
 
-  def game_over?
-    @frames.length >= 10 &&
-    !frame_incomplete? &&
-    !spare? &&
-    !new_strike? &&
-    !old_strike?
-  end
-
-  def cant_roll?(x)
-    wrong_number_of_pins?(x) ||
-    game_over?
-
+  def extra_roll_total
+    (spare?(@frames.last) ? 1 : 0) + 
+    (strike?(@frames.last) ? 2 : 0) +
+    (@frames.flatten[-2] == 10 && !strike?(@frames.last) ? 1 : 0)
   end
 
   def roll(pins)
-    raise BowlingError if cant_roll?(pins)
-    @rolls << pins
-    if frame_incomplete?
-      @frames.last << pins
+    raise BowlingError if !pins.between?(0,10)
+    multiplier = bonus + 1
+    unless ten_frames_over?
+      if frame_incomplete?
+        raise BowlingError if @frames.last && pins + @frames.last.sum > 10
+        @frames.last << pins
+      else
+        @frames << [pins]
+      end
+      @score += pins * multiplier
     else
-      @frames << [pins]
+      raise BowlingError if extra_roll_total <= @extras.length
+      raise BowlingError if @extras.first && @extras.first != 10 && @extras.first + pins > 10
+      @extras << pins
+      @score += pins * (strike?(@frames.last) && strike?(@frames[-2]) && @extras.length == 1 ? 2 : 1)
     end
-    @score += pins if spare?
-    @score += pins if new_strike?
-    @score += pins if old_strike?
-
-    @score += pins
-
   end
 end
 
 module BookKeeping
   VERSION = 3
 end
-
-x = Game.new
-y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 3]
-y.each {|z| x.roll(z)}
-p x.frames
-p x.score
-p x.game_over?
-p x.new_strike?
